@@ -1,0 +1,26 @@
+import sun.tools.jar.Main
+
+plugins {
+    id 'java'
+}
+
+group 'uj.java.battleships'
+version '1.0'
+
+sourceCompatibility = JavaVersion.VERSION_17
+
+tasks.register('uberJar', Jar) {
+    manifest {
+        attributes(
+                'Implementation-Title': project.name,
+                'Implementation-Version': project.version,
+                'Main-Class': 'uj.java.battleships.Main')
+    }
+    from sourceSets.main.output
+    dependsOn configurations.runtimeClasspath
+    from {
+        configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+    }
+}
+
+
